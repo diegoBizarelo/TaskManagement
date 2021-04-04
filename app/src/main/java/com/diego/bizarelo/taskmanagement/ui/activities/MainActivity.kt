@@ -1,10 +1,11 @@
-package com.diego.bizarelo.taskmanagement
+package com.diego.bizarelo.taskmanagement.ui.activities
 
 import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.diego.bizarelo.taskmanagement.R
 
 class MainActivity : AppCompatActivity() {
 

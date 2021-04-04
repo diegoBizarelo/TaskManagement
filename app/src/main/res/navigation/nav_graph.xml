@@ -7,7 +7,32 @@
 
     <fragment
         android:id="@+id/taskListFragment"
-        android:name="com.diego.bizarelo.taskmanagement.ui.TaskListFragment"
+        android:name="com.diego.bizarelo.taskmanagement.ui.fragmets.listTasks.TaskListFragment"
         android:label="fragment_task_list"
-        tools:layout="@layout/fragment_task_list" />
+        tools:layout="@layout/fragment_task_list" >
+        <action
+            android:id="@+id/action_taskListFragment_to_taskDetailsFragment"
+            app:destination="@id/taskDetailsFragment" />
+        <action
+            android:id="@+id/action_taskListFragment_to_taskEditFragment"
+            app:destination="@id/taskEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskDetailsFragment"
+        android:name="com.diego.bizarelo.taskmanagement.ui.fragmets.taskCreate.TaskCreateFragment"
+        android:label="fragment_task_details"
+        tools:layout="@layout/fragment_task_create" >
+        <action
+            android:id="@+id/action_taskDetailsFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskEditFragment"
+        android:name="com.diego.bizarelo.taskmanagement.ui.fragmets.editTask.TaskEditFragment"
+        android:label="fragment_task_edit"
+        tools:layout="@layout/fragment_task_edit" >
+        <action
+            android:id="@+id/action_taskEditFragment_to_taskListFragment"
+            app:destination="@id/taskListFragment" />
+    </fragment>
 </navigation>
