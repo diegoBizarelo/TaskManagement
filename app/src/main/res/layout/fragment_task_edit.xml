@@ -102,8 +102,8 @@
                 android:checked="false"
                 android:gravity="center_horizontal"
                 android:onClick="@{() -> editFragment.toggleStatus()}"
-                android:textOff="ToDo"
-                android:textOn="Done"
+                android:textOff="@string/todo"
+                android:textOn="@string/done"
                 android:textSize="20sp" />
 
         </LinearLayout>

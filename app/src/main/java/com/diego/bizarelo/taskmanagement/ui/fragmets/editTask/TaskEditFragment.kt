@@ -1,6 +1,7 @@
 package com.diego.bizarelo.taskmanagement.ui.fragmets.editTask
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,14 +32,14 @@ class TaskEditFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val fragmentBinding = FragmentTaskEditBinding.inflate(inflater , container, false)
+        val fragmentBinding = FragmentTaskEditBinding.inflate(inflater, container, false)
         binding = fragmentBinding
-        taskPosition = arguments?.getInt("taskPosition")
+        taskPosition = arguments?.getInt(R.string.position.toString())
         if (taskPosition == null)
             findNavController().popBackStack()
 
         taskViewModelFactory = TaskViewModelFactory(taskPosition!!)
-        taskViewModel =  ViewModelProvider(this, taskViewModelFactory ).get(TaskViewModel::class.java)
+        taskViewModel =  ViewModelProvider(this, taskViewModelFactory).get(TaskViewModel::class.java)
         taskViewModel.status.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it) {
                 binding!!.editTaskDate.text = taskViewModel.task.value?.date
@@ -62,14 +63,22 @@ class TaskEditFragment : Fragment() {
 
     fun showCalendar() {
         val now = Calendar.getInstance()
+        val selectedDate = Calendar.getInstance()
+
+        val timePicker = TimePickerDialog(activity, { _, hour, minute ->
+            selectedDate.set(Calendar.HOUR, hour)
+            selectedDate.set(Calendar.MINUTE, minute)
+            taskViewModel.setTime(selectedDate.timeInMillis.toString())
+        }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), false)
+
         val datePicker = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener {
             _, year, month, dayOfMonth ->
-            val selectedDate = Calendar.getInstance()
             selectedDate.set(Calendar.YEAR,year)
             selectedDate.set(Calendar.MONTH,month)
             selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
-            },
-            now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
+            timePicker.show()
+        },
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
         datePicker.show()
     }
 
@@ -81,16 +90,16 @@ class TaskEditFragment : Fragment() {
         try {
             val title = binding!!.editTaskTitle
             if (title.text.toString().isEmpty()) {
-                title.error = "campo obrigatório"
+                title.error = R.string.important.toString()
                 return
             }
             taskViewModel.setTitle(title.text.toString())
             taskViewModel.save()
             findNavController().navigate(R.id.action_taskEditFragment_to_taskListFragment)
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Toast.makeText(
                     context,
-                    "Ocorreu algum erro, por favor reinicie o app!",
+                    R.string.erroMsg,
                     Toast.LENGTH_SHORT).show()
         }
     }

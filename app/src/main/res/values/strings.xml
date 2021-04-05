@@ -5,4 +5,12 @@
     <string name="done">Done</string>
     <string name="title">Title</string>
     <string name="task_title">Task Title</string>
+    <string name="ok">cofirm</string>
+    <string name="cancel">cancel</string>
+    <string name="deleteMsg">Confirm deletion of the task?</string>
+    <string name="taskAlreadyDone">This task is already done</string>
+    <string name="todo">ToDo</string>
+    <string name="erroMsg">Ocorreu algum erro, por favor reinicie o app!</string>
+    <string name="important">Campo obrigatório</string>
+    <string name="position">taskPosition</string>
 </resources>

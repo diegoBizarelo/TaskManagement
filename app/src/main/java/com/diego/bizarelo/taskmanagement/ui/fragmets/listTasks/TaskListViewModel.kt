@@ -10,17 +10,17 @@ class TaskListViewModel : ViewModel() {
     private val _tasks = MutableLiveData(Repository.getAll())
     val tasks: LiveData<List<Task>> = _tasks as LiveData<List<Task>>
 
-    fun addTask(task: Task) {
-        _tasks.value!!.add(task)
+    fun taskDone(position: Int) : Boolean {
+        val task = _tasks.value!![position]
+        if (task.done) {
+            return false
+        }
+        val temTask = Task(task.title, task.time, true)
+        Repository.update(position, temTask)
+        return true
     }
 
     fun remove(position: Int) {
-        _tasks.value?.removeAt(position)
         Repository.delete(position)
-    }
-
-    fun editTask(position: Int, title: String, description: Long) {
-        val task = _tasks.value!![position]
-        task.title = title
     }
 }

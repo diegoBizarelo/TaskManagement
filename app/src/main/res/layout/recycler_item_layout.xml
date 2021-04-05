@@ -3,11 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="taskLayout"
-            type="com.diego.bizarelo.taskmanagement.model.Task" />
-    </data>
 
 <com.google.android.material.card.MaterialCardView
     android:id="@+id/item_recycler"
@@ -41,8 +36,7 @@
             android:hint="@string/title"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/task_item_image"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintEnd_toStartOf="@+id/task_item_add_alarm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/task_item_title"
             app:layout_constraintVertical_bias="0.037" />
@@ -56,6 +50,18 @@
             app:layout_constraintEnd_toEndOf="@+id/task_item_title"
             app:layout_constraintTop_toBottomOf="@+id/task_item_title"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/task_item_add_alarm"
+            android:layout_width="58dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/task_item_image"
+            app:layout_constraintTop_toBottomOf="@+id/task_item_title"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_add_alarm_location_foreground" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

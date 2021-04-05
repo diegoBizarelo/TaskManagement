@@ -1,6 +1,5 @@
 package com.diego.bizarelo.taskmanagement.ui.fragmets.editTask
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +20,6 @@ class TaskViewModel(private val taskPosition: Int) : ViewModel() {
         _status.value = false
         _task.value = Repository.get(taskPosition)
         val task = Task(_task.value!!.title, _task.value!!.time, _task.value!!.done)
-        Log.i("Date", task.time.toString())
         _tempTask.value = task
     }
 

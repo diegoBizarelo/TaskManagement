@@ -1,20 +1,23 @@
 package com.diego.bizarelo.taskmanagement.ui.fragmets.listTasks
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.diego.bizarelo.taskmanagement.R
 import com.diego.bizarelo.taskmanagement.adapter.TaskRecyclerAdapter
 import com.diego.bizarelo.taskmanagement.databinding.FragmentTaskListBinding
+import com.diego.bizarelo.taskmanagement.model.Task
 
 
 class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
@@ -28,14 +31,9 @@ class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
         val fragmentBinding = FragmentTaskListBinding.inflate(inflater, container, false)
         binding = fragmentBinding
         recyclerViewListTask = fragmentBinding.recyclerViewTask
-        taskListViewModel.tasks.observe(viewLifecycleOwner, Observer {
+        taskListViewModel.tasks.observe(viewLifecycleOwner, {
             if (!it.isNullOrEmpty()) {
-                val adapter = TaskRecyclerAdapter(it, this) //{
-//                        val taskViewModel : TaskViewModel by navGraphViewModels(R.id.task_selection_navigation) {
-//                                TaskViewModelFactory(it.)
-//                        }
-//                        findNavController().navigate(R.id.action_taskListFragment_to_taskEditFragment)
-//                }
+                val adapter = TaskRecyclerAdapter(it, this)
 
                 recyclerViewListTask.adapter = adapter
                 val helper = ItemTouchHelper(
@@ -50,10 +48,34 @@ class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
                                 direction: Int) {
                             val position = viewHolder.adapterPosition
                                 if (direction == ItemTouchHelper.LEFT) {
-                                    taskListViewModel.remove(position)
-                                    adapter.notifyItemRemoved(position)
-                                } else if (direction == ItemTouchHelper.RIGHT) {
+                                    val alertDialog: AlertDialog? = activity?.let {
+                                        val builder = AlertDialog.Builder(it)
+                                        builder.apply {
+                                            setTitle(R.string.deleteMsg)
+                                            setPositiveButton(R.string.ok)
+                                            { _, _ ->
+                                                taskListViewModel.remove(position)
+                                                adapter.notifyItemRemoved(position)
+                                            }
+                                            setNegativeButton(R.string.cancel)
+                                            { _, _ ->
+                                                adapter.notifyItemChanged(position)
+                                            }
+                                        }
+                                        builder.create()
+                                    }
+                                    alertDialog!!.show()
 
+                                } else if (direction == ItemTouchHelper.RIGHT) {
+                                    if (!taskListViewModel.taskDone(position))
+                                        Toast.makeText(
+                                                context,
+                                                R.string.taskAlreadyDone,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                                    else
+                                        taskListViewModel.taskDone(position)
+                                    adapter.notifyItemChanged(position)
                                 }
                             }
 
@@ -70,7 +92,6 @@ class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
     }
 
     fun onClick() {
-        Log.i("Clicked","cliquei no botão")
         findNavController().navigate(R.id.action_taskListFragment_to_taskDetailsFragment)
     }
 
@@ -84,11 +105,20 @@ class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
     }
 
     override fun onTaskClick(position: Int) {
-        val task = taskListViewModel.tasks.value?.get(position)
         val bundle = bundleOf(
-                "taskPosition" to position
-        )
+                R.string.position.toString() to position)
         findNavController().navigate(R.id.action_taskListFragment_to_taskEditFragment, bundle)
+    }
+
+    override fun callAlarmIntent(task: Task) {
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtra(CalendarContract.Events.TITLE, task.title)
+            putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, task.time.toLong())
+        }
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
+            startActivity(intent)
+        }
     }
 
 
