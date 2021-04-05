@@ -61,6 +61,7 @@ class TaskListFragment : Fragment(), TaskRecyclerAdapter.OnTaskListener {
                                             { _, _ ->
                                                 adapter.notifyItemChanged(position)
                                             }
+                                            setCancelable(false)
                                         }
                                         builder.create()
                                     }

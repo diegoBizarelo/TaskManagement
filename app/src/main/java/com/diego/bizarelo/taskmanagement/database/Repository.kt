@@ -15,7 +15,7 @@ object Repository {
             Task("Ler nas Entrelinhas", "1659781812868",  false),
             Task("Chutar um Paralelepípedo", "1649781813868",  false),
             Task("Fazer Pontilhismo", "1639181813868",  false),
-            Task("Conta milho de uma espiga", "1621781013868",  false),
+            Task("Contar grãos milho em espiga jlkdsljkflsd", "1621781013868",  false),
     )
 
     fun getAll() = tasks
